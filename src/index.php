@@ -266,8 +266,8 @@ services:
 		volumes:
 			-    mysql-data:/var/lib/mysql
 		environment:
-		MYSQL_ROOT_PASSWORD: mariadb
-		MYSQL_DATABASE: AWS
+			MYSQL_ROOT_PASSWORD: mariadb
+			MYSQL_DATABASE: AWS
 
 volumes:
 	mysql-data:</pre>
