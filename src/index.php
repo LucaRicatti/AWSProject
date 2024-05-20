@@ -251,20 +251,20 @@ services:
 			- 443:443
 
 		volumes:
-			- ./php/:/var/www/html/
+			- ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+			- ./nginx/ssl:/etc/nginx/ssl
 
 	php:
 		build: ./php/
 		expose:
-		- 9000
+			- 9000
 		volumes:
 			- ./php/:/var/www/html/
-
 
 	db:
 		image: mariadb
 		volumes:
-			-    mysql-data:/var/lib/mysql
+			- mysql-data:/var/lib/mysql
 		environment:
 			MYSQL_ROOT_PASSWORD: mariadb
 			MYSQL_DATABASE: AWS
@@ -299,9 +299,27 @@ volumes:
 					<span class="material-symbols-rounded">content_copy</span>
 				</button>
 			</code>
-			<p>
-				Creare il "Dockerfile" e il "default.conf":
-			</p>
+			<p>Per far si che il sito funzioni in https con ssl bisogna creare dei certificati. Per farlo prima creare la cartella che conterrà i certificati:</p>
+			<code>
+				<div class="code-text-container">
+					<div class="prefix">project/nginx $</div>
+					<div class="text">mkdir ssl</div>
+				</div>
+				<button class="copy-button">
+					<span class="material-symbols-rounded">content_copy</span>
+				</button>
+			</code>
+			<p>E poi utilizzare il seguente comando per creare un certificato "self-made"</p>
+			<code>
+				<div class="code-text-container">
+					<div class="prefix">project/nginx $</div>
+					<div class="text">openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /ssl/cert.key -out /ssl/cert.pem</div>
+				</div>
+				<button class="copy-button">
+					<span class="material-symbols-rounded">content_copy</span>
+				</button>
+			</code>
+			<p>Questo comando creerà un certificato "self-made" valido per un anno. Una volta creato il certificato, creare il "Dockerfile" e il "default.conf":</p>
 			<code>
 				<div class="code-text-container">
 					<div class="prefix">project/nginx $</div>
@@ -366,6 +384,9 @@ server {
 	listen 443 ssl default_server;  
 	root /var/www/html;
 	index index.html index.php;
+
+	ssl_certificate /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/cert.key;
 
 	charset utf-8;
 
