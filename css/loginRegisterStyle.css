@@ -1,0 +1,67 @@
+* {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	appearance: 0;
+	border: 0;
+	text-decoration: 0;
+	box-sizing: border-box;
+	font-weight: 400;
+}
+
+body {
+	font-family: "Kanit", sans-serif;
+	overflow: hidden;
+}
+
+h1, h2, h3 {
+	font-weight: 500;
+}
+
+input {
+	font-family: 'Kanit', sans-serif;
+}
+
+.container {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.form-box {
+	padding: 10px;
+	width: 400px;
+	height: auto;
+	box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-input-container input {
+	width: 100%;
+	padding: 2px 5px;
+	margin-bottom: 10px;
+}
+
+.form-header {
+	margin-bottom: 30px;
+}
+
+.form-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.form-footer a {
+	font-size: .85rem;
+}
+
+.form-footer input {
+	padding: 5px 30px;
+}
+
+.shadow {
+	box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.2);
+}

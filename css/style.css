@@ -1,0 +1,153 @@
+html {
+	scroll-behavior: smooth;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	appearance: 0;
+	border: 0;
+	text-decoration: 0;
+	box-sizing: border-box;
+	font-weight: 400;
+}
+
+h1, h2, h3 {
+	font-weight: 500;
+}
+
+button {
+	background: none;
+}
+
+br {
+	user-select: none;
+}
+
+pre {
+	tab-size: 4;
+}
+
+body {
+	height: 100vh;
+	width: 100vw;
+	overflow-x: hidden;
+	font-family: "Kanit", sans-serif;
+}
+
+.header {
+	background: rgb(131,58,180);
+	background: linear-gradient(90deg, rgba(131,58,180,1), rgba(253,29,29,1), rgba(252,176,69,1));
+	position: relative;
+	margin-top: 1%;
+	left: 50%;
+	width: 98vw;
+	height: 6vh;
+	transform: translateX(-50%);
+}
+
+.header h1 {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.chapters-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1%;
+	position: fixed;
+	left: 1%;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 60%;
+}
+
+.chapters-container a {
+	color: rgb(150, 150, 150);
+	transition: color, margin-left 100ms;
+}
+
+.chapters-container a:hover,
+.chapters-container a.selected {
+	color: rgb(50, 50, 50);
+	margin-left: 5px;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+	padding: 20px 0 50px 0;
+}
+
+.section {
+	width: 60%;
+}
+
+.section h2 {
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	position: sticky;
+	top: 0px;
+	width: 100%;
+	padding-top: 20px;
+}
+
+.section p {
+	margin-bottom: 5px;
+}
+
+.section img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5px;
+}
+
+.section a {
+	font-weight: 500;
+	text-decoration: underline;
+}
+
+.section code {
+	display: flex;
+	justify-content: space-between;
+	align-items: top;
+	background-color: rgb(28, 41, 51);
+	padding: 10px;
+	margin-bottom: 5px;
+	overflow-x: auto;
+}
+
+.section code * {
+	color:white;
+	font-size: .9rem;
+}
+
+.code-text-container {
+	display: flex;
+}
+
+.prefix {
+	margin-right: 5px;
+	user-select: none;
+}
+
+.copy-button {
+	height: 14.41px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.filler {
+	width: 100%;
+	height: 48.5vh;
+}
