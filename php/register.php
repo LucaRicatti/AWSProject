@@ -10,15 +10,15 @@ if (isset($_SESSION['logged']) AND $_SESSION['logged'] === true) {
 $email = strtolower($_POST["email"]);
 $password = md5($_POST["password"]);
 
-if (!isset($username) || !isset($email) || !isset($password)) {
+if (!isset($email) || !isset($password)) {
 	header("location: ../src/register/");
 }
 
-$sql = "SELECT * FROM utenti WHERE email ='$email' AND password = '$password'";
+$sql = "SELECT * FROM utenti WHERE email ='$email'";
 $res = $conn->query($sql);
 
 if ($res->num_rows > 0) {
-	header("location: ../src/register/");
+	header("location: ../src/register/index.php");
 	return;
 }
 
