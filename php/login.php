@@ -11,11 +11,11 @@ $email = strtolower($_POST['email']);
 $password = md5($_POST['password']);
 
 if (!isset($email) || !isset($password)){
-	header("location: ../src/login");
+	header("location: ../src/login/");
 	return;
 }
 
-$sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+$sql = "SELECT * FROM utenti WHERE email = '$email' AND password = '$password'";
 $res = $conn -> query($sql);
 
 if ($res -> num_rows > 0) {
