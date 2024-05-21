@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
-	header("Location: ./login/");
+	header("Location: ./login/index.php");
 	return;
 }
 ?>
@@ -203,7 +203,9 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
 			<code>
 				<div class="code-text-container">
 					<pre class="text">
-FROM php:7.0-fpm
+FROM php:7.4-fpm
+WORKDIR /var/www/html
+COPY . .
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 RUN docker-php-ext-enable mysqli</pre>
 				</div>
@@ -247,16 +249,18 @@ services:
 	nginx:
 		build: ./nginx/
 		ports:
-			- 80:80
-			- 443:443
+			- "80:80"
+			- "443:443"
 
 		volumes:
-			- ./php/:/var/www/html/
+			- ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+			- ./php:/var/www/html
+			- ./nginx/ssl:/etc/nginx/ssl
 
 	php:
 		build: ./php/
 		expose:
-		- 9000
+			- "9000"
 		volumes:
 			- ./php/:/var/www/html/
 
@@ -266,8 +270,8 @@ services:
 		volumes:
 			-    mysql-data:/var/lib/mysql
 		environment:
-		MYSQL_ROOT_PASSWORD: mariadb
-		MYSQL_DATABASE: AWS
+			MYSQL_ROOT_PASSWORD: mariadb
+			MYSQL_DATABASE: AWS
 
 volumes:
 	mysql-data:</pre>
@@ -299,9 +303,27 @@ volumes:
 					<span class="material-symbols-rounded">content_copy</span>
 				</button>
 			</code>
-			<p>
-				Creare il "Dockerfile" e il "default.conf":
-			</p>
+			<p>Per far si che il sito funzioni in https con ssl bisogna creare dei certificati. Per farlo prima creare la cartella che conterrà i certificati:</p>
+			<code>
+				<div class="code-text-container">
+					<div class="prefix">project/nginx $</div>
+					<div class="text">mkdir ssl</div>
+				</div>
+				<button class="copy-button">
+					<span class="material-symbols-rounded">content_copy</span>
+				</button>
+			</code>
+			<p>E poi utilizzare il seguente comando per creare un certificato "self-made"</p>
+			<code>
+				<div class="code-text-container">
+					<div class="prefix">project/nginx $</div>
+					<div class="text">openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /ssl/cert.key -out /ssl/cert.pem</div>
+				</div>
+				<button class="copy-button">
+					<span class="material-symbols-rounded">content_copy</span>
+				</button>
+			</code>
+			<p>Questo comando creerà un certificato "self-made" valido per un anno. Una volta creato il certificato, creare il "Dockerfile" e il "default.conf":</p>
 			<code>
 				<div class="code-text-container">
 					<div class="prefix">project/nginx $</div>
@@ -364,39 +386,35 @@ server {
 
 server {
 	listen 443 ssl default_server;
-	root /var/www/html;
-	index index.html index.php;
 
-	charset utf-8;
+	root /var/www/html;
+	index index.php index.html;
+
+	ssl_certificate /etc/nginx/ssl/cert.pem;
+	ssl_certificate_key /etc/nginx/ssl/cert.key;
 
 	location / {
-		try_files $uri $uri/ /index.php?$query_string;
+		try_files $uri $uri/ =404;
 	}
 
-	location = /favicon.ico { access_log off; log_not_found off; }
-	location = /robots.txt { access_log off; log_not_found off; }
-
-	access_log off;
-	error_log /var/log/nginx/error.log error;
-
-	sendfile off;
-
-	client_max_body_size 100m;
-
-	location ~ .php$ {
-		fastcgi_split_path_info ^(.+.php)(/.+)$;
+	location ~ \.php$ {
+		include fastcgi_params;
 		fastcgi_pass php:9000;
 		fastcgi_index index.php;
-		include fastcgi_params;
-		fastcgi_read_timeout 300;
 		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-		fastcgi_intercept_errors off;
-		fastcgi_buffer_size 16k;
-		fastcgi_buffers 4 16k;
 	}
 
-	location ~ /.ht {
-		deny all;
+	location ~ \.css {
+		add_header Content-Type text/css;
+	}
+
+	location ~ \.js {
+		add_header Content-Type application/x-javascript;
+	}
+
+	error_page 404 /404.html;
+	location = /404.html {
+		internal;
 	}
 }</pre>
 				</div>
